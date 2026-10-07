@@ -162,6 +162,10 @@ python3 tests/smoke.py             # live: boots a browser, drives a real form
 CI runs the two offline suites on Linux, macOS and Windows across Python 3.10
 and 3.13, and the live smoke test on Ubuntu under Xvfb.
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Cubozzis/browser-undetected&type=Date)](https://star-history.com/#Cubozzis/browser-undetected&Date)
+
 ## Credits
 
 [Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright) by
