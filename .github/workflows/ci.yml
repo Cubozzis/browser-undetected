@@ -1,0 +1,58 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit:
+    # human.py's math is browser-free, so the cheap tests run on every OS.
+    name: unit (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install test dependencies
+        run: python -m pip install --quiet pyyaml
+      - run: python tests/test_frontmatter.py
+      - run: python tests/test_human.py
+
+  smoke:
+    # End-to-end: real browser, real input. Linux only — it needs a display,
+    # which the runner gets from Xvfb, and a Chrome, which the runner image
+    # already carries.
+    name: smoke (ubuntu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: System dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb || true
+          if ! command -v google-chrome >/dev/null; then
+            echo "::warning::no system Chrome; smoke will fall back to bundled Chromium"
+          fi
+      - name: Run smoke test
+        run: python tests/smoke.py
+        timeout-minutes: 15
+      - name: Upload artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-artifacts
+          path: |
+            /tmp/bu-smoke-*/.browser/**
+            ~/.browser-undetected-smoke/logs/**
+          if-no-files-found: ignore
