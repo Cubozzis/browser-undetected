@@ -1,0 +1,36 @@
+{
+  "name": "browser-undetected",
+  "version": "1.0.0",
+  "description": "Drive a real, undetected Chrome from the shell: human-like mouse and typing, a persistent session, and full network capture.",
+  "author": {
+    "name": "Cubozzis",
+    "url": "https://github.com/Cubozzis"
+  },
+  "homepage": "https://github.com/Cubozzis/browser-undetected",
+  "repository": "https://github.com/Cubozzis/browser-undetected",
+  "license": "MIT",
+  "keywords": [
+    "browser",
+    "browser-automation",
+    "stealth",
+    "scraping",
+    "patchright",
+    "playwright"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Browser Undetected",
+    "shortDescription": "Undetected Chrome automation",
+    "longDescription": "Pilot a real, undetected Chrome from the shell: navigate, click, type, fill forms, log in, scrape, screenshot, and capture every request, response and WebSocket frame. Human-like mouse curves and typing cadence, and the browser stays alive between commands so multi-step flows work across separate tool calls.",
+    "developerName": "Cubozzis",
+    "category": "Productivity",
+    "capabilities": ["Instructions"],
+    "websiteURL": "https://github.com/Cubozzis/browser-undetected",
+    "defaultPrompt": [
+      "Use browser-undetected to open this site and tell me what is on it.",
+      "Capture the API calls this page makes while I browse it.",
+      "Log in to this site and keep the session for the next commands."
+    ],
+    "brandColor": "#1F6FEB"
+  }
+}

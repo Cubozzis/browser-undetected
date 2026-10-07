@@ -14,7 +14,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "..", "scripts"))
+                                "..", "skills", "browser-undetected", "scripts"))
 
 import human as H  # noqa: E402
 

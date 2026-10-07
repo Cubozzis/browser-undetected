@@ -28,7 +28,8 @@ def check(name, cond, detail=""):
 
 
 def main():
-    text = open(os.path.join(ROOT, "SKILL.md"), encoding="utf-8").read()
+    text = open(os.path.join(ROOT, "skills", "browser-undetected", "SKILL.md"),
+                encoding="utf-8").read()
     m = FM.match(text)
     check("SKILL.md opens with a frontmatter block", m is not None)
     if not m:

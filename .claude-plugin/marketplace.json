@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "browser-undetected",
+  "description": "Drive a real, undetected Chrome from the shell. Human-like input, a session that survives between commands, and full network capture.",
+  "owner": {
+    "name": "Cubozzis",
+    "url": "https://github.com/Cubozzis"
+  },
+  "plugins": [
+    {
+      "name": "browser-undetected",
+      "description": "Undetected Chrome automation for agents: navigate, click, type, fill forms, log in, scrape, screenshot, and capture every request and WebSocket frame. Human-like mouse curves and typing cadence; the browser stays alive across tool calls.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

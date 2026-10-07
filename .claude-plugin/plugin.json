@@ -1,0 +1,9 @@
+{
+  "name": "browser-undetected",
+  "version": "1.0.0",
+  "description": "Drive a real, undetected Chrome from the shell: human-like mouse and typing, a persistent session, and full network capture.",
+  "author": {
+    "name": "Cubozzis",
+    "url": "https://github.com/Cubozzis"
+  }
+}

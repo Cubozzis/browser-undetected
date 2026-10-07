@@ -261,21 +261,6 @@ def _proxy_conf():
     return conf
 
 
-def _has_gpu():
-    """True when the box exposes a real GPU (so hardware WebGL is available).
-
-    Easy to answer on Linux and only interesting there: a headless VPS or a
-    container has no /dev/dri, a desktop does. macOS and Windows machines all
-    have one, and the fallback flag is a no-op when a GPU is present anyway.
-    """
-    if sys.platform != "linux":
-        return True
-    try:
-        return bool(os.listdir("/dev/dri"))
-    except OSError:
-        return False
-
-
 def _launch_kwargs():
     # Deliberately tiny. Patchright rewrites Chromium's switch list itself:
     # it ADDS --disable-blink-features=AutomationControlled, REMOVES
@@ -290,8 +275,14 @@ def _launch_kwargs():
     # "getContext('webgl') === null" is one of the loudest headless tells there
     # is, on top of breaking every WebGL-using site. The flag only *permits*
     # SwiftShader; where a real GPU exists Chrome still renders in hardware.
-    if not _has_gpu():
-        args.append("--enable-unsafe-swiftshader")
+    #
+    # Unconditional on purpose. This used to be gated on /dev/dri existing,
+    # which asks the wrong question: a host can expose a render node it cannot
+    # actually drive — GitHub's own runners do — and the gate then withheld the
+    # flag from the machine that needed it most, leaving no WebGL at all. The
+    # gate could only ever reject a box whose hardware might work; it never
+    # added anything a real GPU wanted.
+    args.append("--enable-unsafe-swiftshader")
     if PROXY:
         # Without this Chromium leaks the real IP over WebRTC STUN even when
         # every HTTP request goes through the proxy.

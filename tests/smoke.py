@@ -29,7 +29,7 @@ import threading
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BU = os.path.join(HERE, "..", "scripts", "bu.py")
+BU = os.path.join(HERE, "..", "skills", "browser-undetected", "scripts", "bu.py")
 PORT = os.environ.get("BU_SMOKE_PORT", "9333")
 PROFILE = "selftest"
 # A smoke run must never touch — least of all `stop` — the daemon a real session
@@ -152,7 +152,19 @@ def main():
         # --enable-unsafe-swiftshader; that absence is itself a bot signal, so
         # assert on the context, not on `typeof`.
         r = bu("eval", "!!document.createElement('canvas').getContext('webgl')")
-        check("WebGL context is available", r.get("result") is True, r.get("result"))
+        detail = r.get("result")
+        if r.get("result") is not True:
+            # A bare `False` here costs a whole CI round-trip to explain. Report
+            # what the renderer actually objected to, and whether the box even
+            # advertises a render node.
+            why = bu("eval",
+                     "(()=>{const c=document.createElement('canvas');let e='';"
+                     "c.addEventListener('webglcontextcreationerror',"
+                     "x=>{e=x.statusMessage});"
+                     "return c.getContext('webgl') ? 'ok' : (e || 'no error event')})()")
+            dri = sorted(os.listdir("/dev/dri")) if os.path.isdir("/dev/dri") else []
+            detail = f"no context; browser says {why.get('result')!r}; /dev/dri={dri}"
+        check("WebGL context is available", r.get("result") is True, detail)
 
         print("\nhuman typing")
         t0 = time.time()
